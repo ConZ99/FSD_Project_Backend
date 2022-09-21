@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.Controllers
 {
@@ -21,10 +19,14 @@ namespace FinalProject.Controllers
             var order = await _context.Orders.Where(o => o.UserId == id).ToListAsync();
 
             if (order == null)
+            {
                 return BadRequest("Order not found.");
+            }
 
             if (order.Count() <= 0)
+            {
                 return BadRequest("Nothing inside.");
+            }
 
             return Ok(order);
         }
@@ -37,24 +39,29 @@ namespace FinalProject.Controllers
 
             var account = await _context.Accounts.FindAsync(id);
             double price = 0;
-            foreach (var cart in carts)
+            foreach (Cart? cart in carts)
             {
                 price += cart.TotalPrice;
             }
             if (account != null)
             {
                 if (account.Funds < price)
+                {
                     return BadRequest("404");
+                }
             }
 
             string productNames = "";
             var order = new Order();
-            foreach (var cart in carts)
+            foreach (Cart? cart in carts)
             {
                 _context.Carts.Remove(cart);
                 var product = await _context.Products.FindAsync(cart.ProductId);
-                if(product != null)
+                if (product != null)
+                {
                     productNames += product.Name;
+                }
+
                 order.TotalPrice += cart.TotalPrice;
             }
 

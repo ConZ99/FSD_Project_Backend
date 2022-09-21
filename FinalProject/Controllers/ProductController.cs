@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace FinalProject.Controllers
 {
@@ -27,7 +26,9 @@ namespace FinalProject.Controllers
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
+            {
                 return BadRequest("Product not found.");
+            }
 
             return Ok(product);
         }
@@ -38,7 +39,9 @@ namespace FinalProject.Controllers
         {
             var product = await _context.Products.Where(p => p.Uses.Contains(use)).ToListAsync();
             if (product == null)
+            {
                 return BadRequest("Product not found.");
+            }
 
             return Ok(product);
         }
@@ -75,7 +78,9 @@ namespace FinalProject.Controllers
         {
             var dbProduct = await _context.Products.FindAsync(id);
             if (dbProduct == null)
+            {
                 return BadRequest("Product not found.");
+            }
 
             _context.Products.Remove(dbProduct);
             await _context.SaveChangesAsync();

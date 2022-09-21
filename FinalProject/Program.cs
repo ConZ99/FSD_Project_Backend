@@ -1,11 +1,11 @@
-global using Microsoft.EntityFrameworkCore;
+global using FinalProject.Controllers.Services.UserService;
 global using FinalProject.Data;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
-global using FinalProject.Controllers.Services.UserService;
+global using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -37,7 +37,8 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters{
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
             .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),

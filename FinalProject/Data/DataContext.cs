@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace FinalProject.Data
+﻿namespace FinalProject.Data
 {
     public class DataContext : DbContext
     {

@@ -19,5 +19,25 @@ namespace FinalProject.Controllers.Services.UserService
             }
             return result;
         }
+
+        public string GetMyId()
+        {
+            var result = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            return result;
+        }
+
+        public string GetMyRole()
+        {
+            var result = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            }
+            return result;
+        }
     }
 }
