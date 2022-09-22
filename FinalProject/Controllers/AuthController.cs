@@ -23,13 +23,21 @@ namespace FinalProject.Controllers
             _userService = userService;
         }
 
-        [HttpGet("GetMe"), Authorize]
-        public ActionResult<object> GetMe()
+        [HttpGet("GetMe")]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<ActionResult<Account>> GetMe()
         {
-            string? userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userId = _userService.GetMyId();
             string? userName = _userService.GetMyName();
-            string? userRole = User?.FindFirstValue(ClaimTypes.Role);
-            return Ok(new { userId, userName, userRole });
+            string? userRole = _userService.GetMyRole();
+            if(userId == null)
+                return BadRequest();
+
+            var account = await _context.Accounts.FindAsync(int.Parse(userId));
+            if(account == null)
+                return BadRequest();
+
+            return account;
         }
 
         [HttpPost("register")]

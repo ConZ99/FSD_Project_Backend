@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.Controllers
 {
@@ -13,7 +14,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpGet("getOrderByUserId/userId-{id}")]
-        //[Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<Order>> GetOrderByUserId(int id)
         {
             var order = await _context.Orders.Where(o => o.UserId == id).ToListAsync();
@@ -32,14 +33,14 @@ namespace FinalProject.Controllers
         }
 
         [HttpPut("buyCartContent/userId-{id}")]
-        //[Authorize(Roles="Admin,User")]
+        [Authorize(Roles="Admin,User")]
         public async Task<ActionResult<Order>> BuyCartContent(int id)
         {
             var carts = await _context.Carts.Where(c => c.UserId == id).ToListAsync();
 
             var account = await _context.Accounts.FindAsync(id);
             double price = 0;
-            foreach (Cart? cart in carts)
+            foreach (var cart in carts)
             {
                 price += cart.TotalPrice;
             }
@@ -53,7 +54,7 @@ namespace FinalProject.Controllers
 
             string productNames = "";
             var order = new Order();
-            foreach (Cart? cart in carts)
+            foreach (var cart in carts)
             {
                 _context.Carts.Remove(cart);
                 var product = await _context.Products.FindAsync(cart.ProductId);

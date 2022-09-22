@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.Controllers
 {
@@ -13,7 +14,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpGet("getCartByUserId/{id}")]
-        //[Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<Cart>>> GetCartByUserId(int id)
         {
             var cart = await _context.Carts.Where(c => c.UserId == id).ToArrayAsync();
@@ -21,7 +22,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpPut("addToCart/userId-{userId}/productId-{productId}")]
-        //[Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<Cart>> AddToCart(int userId, int productId)
         {
             var checkProd = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
@@ -71,7 +72,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpPut("removeFromCart/userId-{userId}/productId-{productId}")]
-        //[Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<Cart>> RemoveFromCart(int userId, int productId)
         {
             var checkProd = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);

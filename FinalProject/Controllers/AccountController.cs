@@ -38,7 +38,7 @@ namespace FinalProject.Controllers
 
         [HttpPost("editAccount-{id}")]
         [Authorize(Roles = "Admin,User")]
-        public async Task<ActionResult<Account>> AddAccount(Account newAccount, int id)
+        public async Task<ActionResult<Account>> EditAccountById(Account newAccount, int id)
         {
             var oldAccount = await _context.Accounts.FindAsync(id);
             if (oldAccount == null)
@@ -60,7 +60,7 @@ namespace FinalProject.Controllers
 
         [HttpPost("editOwnAccount")]
         [Authorize(Roles = "Admin,User")]
-        public async Task<ActionResult<Account>> AddAccount(Account newAccount)
+        public async Task<ActionResult<Account>> EditOwnAccount(Account newAccount)
         {
             var userId = _userService.GetMyId();
             if (userId == null)
@@ -83,6 +83,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpDelete("deleteAccount-{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<Account>>> DeleteAccountById(int id)
         {
             var dbAccount = await _context.Accounts.FindAsync(id);
